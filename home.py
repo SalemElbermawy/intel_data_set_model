@@ -2,13 +2,24 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import cv2
+import keras
+
+class_names=['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
+
+
+@st.cache_resource
+def load_model():
+   model=keras.models.load_model("model_intel.keras")
+   return model
+    
 
 with st.spinner("Wait model  is downloading ..."):
     
     try:
-        pass
+        model=load_model()
+        st.success("Model Downloaded")
     except Exception as e:
-        pass
+        st.error("Model is vanished")
 
 st.set_page_config(page_title="Intel Data Set")
 
@@ -37,14 +48,14 @@ if image_upload != None:
     if st.button("Activate Model",type="primary"):
         
         with st.spinner("Wait ... "):
-            result=model.predict(img_arr)
+            result=int(np.argmax(model.predict(img_arr)))
             
             st.markdown(f"""
-                      <h3 style="padding:5px; border-radius:5px; color:#F9F9EB; background:#B8BA34;">The decision {result}</h3>  
+                      <h3 style="padding:5px; border-radius:5px; color:#F9F9EB; background:#B8BA34; text-align:center;">The decision is "{class_names[result]}"</h3>  
                         
                         
                         
-                        """)
+                        """,unsafe_allow_html=True)
         
         
 
