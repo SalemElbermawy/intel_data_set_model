@@ -1,0 +1,7 @@
+tensorflow
+numpy
+pillow
+scikit-learn
+pandas
+scikeras
+joblib

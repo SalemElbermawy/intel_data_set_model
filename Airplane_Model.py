@@ -76,7 +76,7 @@ arrival=st.number_input(" Arrival delay in minutes",min_value=0)
 def prepair_inputs():
     
     data=pd.DataFrame(
-        [[gender,customer_type,age,type_of_travel,class_name,flight_distance,wifi_service,time_convenient,
+        [[gender,customer_type,age,type_of_travel,class_type,flight_distance,wifi_service,time_convenient,
           online_booking,food,online_boarding,seats,entertainment,onboard,leg_room,baggage,checkin,inflight_service,cleanliness,arrival]],columns=['Gender', 'Customer Type', 'Age', 'Type of Travel', 'Class',
        'Flight Distance', 'Inflight wifi service',
        'Departure/Arrival time convenient', 'Ease of Online booking',
@@ -88,13 +88,33 @@ def prepair_inputs():
     
     classes=["neutral or dissatisfied","satisfied"]
     
-    result=loaded_model.predict(data)
+    result=int(loaded_model.predict(data)[0])
     
-    class_name=classes[result]
     
-    return class_name
+    
+    return classes[result]
 
-    
-
+if st.button("Activate Model",type="primary"):
+    with st.spinner("in progress"):
+        
+        response=prepair_inputs()
+        
+        st.markdown(f"""
+                    <h3 style="padding:5px; border-left: 6px solid #4f46e5; border-radius:5px; text-align:center; margin-bottom:30px;">The result is {response}</h3>
+                    """,unsafe_allow_html=True)
+        
+        
+            
+        col1,col2=st.columns(2)
+        
+        with col1:
+            st.image("arrival_graph.png",)
+        with col2:
+            st.image("flight_distance.png",)
+            
+        st.write("""
+                We can conclude that from this graphs the company is very good in long distination trips
+                Most of people be angry because of delaying in the journey so this company is bad in the small trips because the delay in it is very sensitive
+                 """)
 
 
